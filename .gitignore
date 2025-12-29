@@ -1,9 +1,11 @@
 # Ignore all Markdown files
 *.md
 !README.md
+!example.md
 
 # Ignore all PDF files
 *.pdf
+!example.pdf
 
 # Ignore input and output folders
 input/

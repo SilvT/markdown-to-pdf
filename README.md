@@ -104,6 +104,12 @@ style:
 - `config.yaml` - Default styling configuration
 - `example.md` - Sample Markdown file for testing
 
+## Runing it
+Run via terminal
+```
+npm run build
+```
+
 ## Troubleshooting
 
 **Error: Config file not found**
