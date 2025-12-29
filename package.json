@@ -1,0 +1,17 @@
+{
+  "name": "md-to-pdf-converter",
+  "version": "1.0.0",
+  "description": "Markdown to PDF converter with custom styling",
+  "scripts": {
+    "build": "node md2pdf.js --all",
+    "convert": "node md2pdf.js"
+  },
+  "keywords": ["markdown", "pdf", "converter"],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "js-yaml": "^4.1.0",
+    "marked": "^9.0.0",
+    "puppeteer": "^21.0.0"
+  }
+}

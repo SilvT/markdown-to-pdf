@@ -1,0 +1,68 @@
+# Markdown to PDF - Style Configuration
+# Edit these values to customize your PDF output
+
+style:
+  # Font settings
+  font_family: '"Bricolage Grotesque", sans-serif'  # Main text font
+  font_size: '7.6pt'                      # Base font size
+  line_height: '1.5'                      # Line spacing
+
+  # Google Fonts (optional - leave empty if not using)
+  # Get the import URL from fonts.google.com
+  # Example: 'https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap'
+  google_fonts_url: 'https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&display=swap'
+
+  # Colors
+  text_color: '#3C5E70'                   # Main text color (brand color)
+  background_color: '#FFFFF'             # Page background
+  heading_color: '#3980AA'                # Headings color (brand highlight)
+  link_color: '#3980AA'                   # Hyperlink color (brand highlight)
+
+  # Heading font
+  heading_font_family: '"Bricolage Grotesque", sans-serif'  # Font for headings (h1-h6)
+
+  # Heading sizes (relative to base font size or absolute like '18pt')
+  heading_sizes:
+    h1: '1.5em'                             # H1 size
+    h2: '1.2em'                           # H2 size
+    h3: '1.1em'                           # H3 size
+    h4: '1em'                           # H4 size
+    h5: '1em'                             # H5 size
+    h6: '0.9em'                           # H6 size
+
+  # Spacing control
+  spacing:
+    heading_top: '0.3em'                  # Space above headings
+    heading_bottom: '0em'               # Space below headings
+    paragraph_bottom: '0.3em'             # Space below paragraphs
+    list_bottom: '0em'                  # Space below lists
+    list_item_bottom: '0.1em'             # Space between list items
+
+  # Page margins
+  margins:
+    top: '1cm'
+    bottom: '2cm'
+    left: '1cm'
+    right: '1cm'
+
+  # Code styling (for inline code)
+  code_background: '#f4f4f4'              # Background for code blocks
+  code_color: '#c7254e'                   # Text color for inline code
+  code_font_family: 'Courier New, monospace'
+
+# Example alternative configurations:
+#
+# Modern/Clean look:
+# font_family: 'Helvetica, Arial, sans-serif'
+# heading_color: '#000000'
+# link_color: '#0066cc'
+#
+# Professional/Business:
+# font_family: 'Times New Roman, serif'
+# heading_color: '#1a1a1a'
+# link_color: '#0052a3'
+#
+# Dark on light:
+# text_color: '#1a1a1a'
+# background_color: '#ffffff'
+# heading_color: '#0d0d0d'
