@@ -104,7 +104,7 @@ style:
 - `config.yaml` - Default styling configuration
 - `example.md` - Sample Markdown file for testing
 
-## Runing it
+## Running it
 Run via terminal
 ```
 npm run build
