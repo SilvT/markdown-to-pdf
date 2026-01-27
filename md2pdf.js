@@ -240,6 +240,74 @@ function generateCSS(config) {
     `;
 }
 
+// Generate header template
+function generateHeaderTemplate(config) {
+    const header = config.header || {};
+    if (!header.enabled) return '';
+
+    const fontSize = header.font_size || '8pt';
+    const text = header.text || '';
+    const fontFamily = config.style?.font_family || 'Arial, sans-serif';
+
+    // If first_page_only, use CSS to hide on pages after first
+    const hideAfterFirst = header.first_page_only
+        ? `<style>
+            .header-content { display: none; }
+            .first-page .header-content { display: block; }
+           </style>
+           <script>
+            if (window.pageNumber === 1) {
+                document.body.classList.add('first-page');
+            }
+           </script>`
+        : '';
+
+    // Use pageNumber class to conditionally show
+    const visibilityStyle = header.first_page_only
+        ? 'style="display: none;" class="header-text" data-first-page-only="true"'
+        : '';
+
+    return `
+        <div style="width: 100%; font-size: ${fontSize}; font-family: ${fontFamily}; padding: 0 1cm;">
+            <span class="pageNumber" style="display: none;"></span>
+            <span ${visibilityStyle}>${text}</span>
+        </div>
+        <script>
+            // Show header only on first page
+            const pageNum = document.querySelector('.pageNumber');
+            const headerText = document.querySelector('.header-text');
+            if (headerText && pageNum) {
+                const isFirstPage = pageNum.textContent === '1';
+                headerText.style.display = isFirstPage ? 'inline' : 'none';
+            }
+        </script>
+    `;
+}
+
+// Generate footer template
+function generateFooterTemplate(config) {
+    const footer = config.footer || {};
+    if (!footer.enabled) return '';
+
+    const fontSize = footer.font_size || '8pt';
+    const position = footer.position || 'right';
+    const fontFamily = config.style?.font_family || 'Arial, sans-serif';
+
+    let justifyContent = 'flex-end'; // default right
+    if (position === 'left') justifyContent = 'flex-start';
+    if (position === 'center') justifyContent = 'center';
+
+    const pageNumber = footer.show_page_number
+        ? '<span class="pageNumber"></span>'
+        : '';
+
+    return `
+        <div style="width: 100%; font-size: ${fontSize}; font-family: ${fontFamily}; display: flex; justify-content: ${justifyContent}; padding: 0 1cm;">
+            ${pageNumber}
+        </div>
+    `;
+}
+
 // Convert markdown to PDF
 async function convertMarkdownToPDF(inputFile, outputFile, configFile) {
     // Check if input file exists
@@ -271,6 +339,25 @@ async function convertMarkdownToPDF(inputFile, outputFile, configFile) {
     const googleFontsUrl = config.style?.google_fonts_url || '';
     const fontLink = googleFontsUrl ? `<link href="${googleFontsUrl}" rel="stylesheet">` : '';
 
+    // Check if we need a first-page-only header (injected into body)
+    const headerConfig = config.header || {};
+    let firstPageHeader = '';
+    if (headerConfig.enabled && headerConfig.first_page_only) {
+        const headerFontSize = headerConfig.font_size || '8pt';
+        const headerText = headerConfig.text || '';
+        const headerMarginBottom = headerConfig.margin_bottom || '1rem';
+        // Use normal document flow (not fixed) so it only appears once at the top
+        firstPageHeader = `
+            <div class="first-page-header" style="
+                font-size: ${headerFontSize};
+                color: #000;
+                margin-bottom: ${headerMarginBottom};
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            ">${headerText}</div>
+        `;
+    }
+
     // Create full HTML document
     const fullHTML = `
 <!DOCTYPE html>
@@ -283,6 +370,7 @@ async function convertMarkdownToPDF(inputFile, outputFile, configFile) {
     </style>
 </head>
 <body>
+    ${firstPageHeader}
     ${htmlContent}
 </body>
 </html>
@@ -298,7 +386,8 @@ async function convertMarkdownToPDF(inputFile, outputFile, configFile) {
     const page = await browser.newPage();
     await page.setContent(fullHTML, { waitUntil: 'networkidle0' });
 
-    await page.pdf({
+    // Prepare PDF options
+    const pdfOptions = {
         path: outputFile,
         format: 'A4',
         printBackground: true,
@@ -308,7 +397,47 @@ async function convertMarkdownToPDF(inputFile, outputFile, configFile) {
             left: 0,
             right: 0
         }
-    });
+    };
+
+    // Add header/footer if configured
+    const footerConfig = config.footer || {};
+
+    if (headerConfig.enabled || footerConfig.enabled) {
+        pdfOptions.displayHeaderFooter = true;
+        pdfOptions.margin.top = (headerConfig.enabled && !headerConfig.first_page_only) ? '1.5cm' : 0;
+        pdfOptions.margin.bottom = footerConfig.enabled ? '1.5cm' : 0;
+
+        // Header template - show only on first page if configured
+        if (headerConfig.enabled) {
+            const fontSize = headerConfig.font_size || '8pt';
+            const text = headerConfig.text || '';
+            const fontFamily = config.style?.font_family || 'Arial, sans-serif';
+
+            if (headerConfig.first_page_only) {
+                // Puppeteer doesn't run JS in header/footer, so we use CSS trick
+                // The .pageNumber class is replaced with the actual page number by Puppeteer
+                // We can't conditionally hide based on it directly, so we inject the header into the HTML body instead
+                pdfOptions.headerTemplate = '<div></div>';
+            } else {
+                pdfOptions.headerTemplate = `
+                    <div style="width: 100%; font-size: ${fontSize}; font-family: ${fontFamily}; padding: 0.5cm 1cm; color: #000;">
+                        ${text}
+                    </div>
+                `;
+            }
+        } else {
+            pdfOptions.headerTemplate = '<div></div>';
+        }
+
+        // Footer template
+        if (footerConfig.enabled) {
+            pdfOptions.footerTemplate = generateFooterTemplate(config);
+        } else {
+            pdfOptions.footerTemplate = '<div></div>';
+        }
+    }
+
+    await page.pdf(pdfOptions);
 
     await browser.close();
 

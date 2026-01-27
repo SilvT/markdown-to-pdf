@@ -5,7 +5,7 @@ style:
   # Font settings
   font_family: '"Bricolage Grotesque", sans-serif'  # Main text font
   font_size: '7.6pt'                      # Base font size
-  line_height: '1.5'                      # Line spacing
+  line_height: '1.4'                      # Line spacing
 
   # Google Fonts (optional - leave empty if not using)
   # Get the import URL from fonts.google.com
@@ -32,9 +32,9 @@ style:
 
   # Spacing control
   spacing:
-    heading_top: '0.3em'                  # Space above headings
-    heading_bottom: '0em'               # Space below headings
-    paragraph_bottom: '0.3em'             # Space below paragraphs
+    heading_top: '0.1em'                  # Space above headings
+    heading_bottom: '0.1em'               # Space below headings
+    paragraph_bottom: '0.1em'             # Space below paragraphs
     list_bottom: '0em'                  # Space below lists
     list_item_bottom: '0.1em'             # Space between list items
 

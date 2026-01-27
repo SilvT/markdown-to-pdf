@@ -1,0 +1,57 @@
+# Canonical-INT.md - Custom Style Configuration
+# Black and white only, header on page 1, pagination on all pages
+
+style:
+  # Font settings (same as base)
+  font_family: '"Bricolage Grotesque", sans-serif'
+  font_size: '7.6pt'
+  line_height: '1.5'
+
+  google_fonts_url: 'https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&display=swap'
+
+  # Black and white colors
+  text_color: '#000000'
+  background_color: '#ffffff'
+  heading_color: '#000000'
+  link_color: '#000000'
+
+  heading_font_family: '"Bricolage Grotesque", sans-serif'
+
+  heading_sizes:
+    h1: '1.5em'
+    h2: '1.2em'
+    h3: '1.1em'
+    h4: '1em'
+    h5: '1em'
+    h6: '0.9em'
+
+  spacing:
+    heading_top: '0.5em'
+    heading_bottom: '0.3em'
+    paragraph_bottom: '0.3em'
+    list_bottom: '0.1em'
+    list_item_bottom: '0.1em'
+
+  margins:
+    top: '1cm'
+    bottom: '2cm'
+    left: '1cm'
+    right: '1cm'
+
+  code_background: '#f4f4f4'
+  code_color: '#000000'
+  code_font_family: 'Courier New, monospace'
+
+# Header/Footer settings
+header:
+  enabled: true
+  first_page_only: true
+  text: 'UX Designer – Design System Written Interview | 21st Jan 2026'
+  font_size: '8pt'
+  margin_bottom: '2rem'
+
+footer:
+  enabled: true
+  show_page_number: true
+  position: 'right'
+  font_size: '8pt'
